@@ -5,7 +5,7 @@ ATMEGA328P based Alarm Clock PCB for the Fluke 87V
 
 # Documentation
 
-I created a full writeup for this project on Hackster.io. See the project page [HERE]()!
+I created a full writeup for this project on Hackster.io. See the project page [HERE](https://www.hackster.io/miekush/fluke-87v-alarm-clock-af6be2)!
 
 # License
 
