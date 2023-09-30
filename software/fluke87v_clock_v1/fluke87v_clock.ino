@@ -3,23 +3,33 @@
 #include "TimerOne.h"
 
 //output pins
-#define STAT_LED    4
-#define BKLT_PIN    3
-#define BZR_PIN     16
+#define STAT_LED_PIN    4
+#define BKLT_PIN        3
+#define BZR_PIN         16
 
 //digital input pins 
-#define SHIFT_SW    8
-#define MINMX_SW    7
-#define RANGE_SW    6
-#define HOLD_SW     5
-#define BKLT_SW     15
-#define BEEP_SW     14
-#define REL_SW      10
-#define HZ_SW       9
-#define RTC_INT     2
+#define SHIFT_SW_PIN    8
+#define MINMX_SW_PIN    7
+#define RANGE_SW_PIN    6
+#define HOLD_SW_PIN     5
+#define BKLT_SW_PIN     15
+#define BEEP_SW_PIN     14
+#define REL_SW_PIN      10
+#define HZ_SW_PIN       9
+#define RTC_INT_PIN     2
 
 //analog input pins
-#define BAT_V       A3
+#define BAT_V_PIN       A3
+
+//button switch pins
+#define SHIFT_SW        0
+#define MINMX_SW        1
+#define RANGE_SW        2
+#define HOLD_SW         3
+#define BKLT_SW         4
+#define BEEP_SW         5
+#define REL_SW          6
+#define HZ_SW           7
 
 BU9796 display;
 RTC_DS3231 rtc;
@@ -42,20 +52,20 @@ void setup()
   rtc.disable32K();
 
   //init output pins
-  pinMode(STAT_LED, OUTPUT);
+  pinMode(STAT_LED_PIN, OUTPUT);
   pinMode(BKLT_PIN, OUTPUT);
   pinMode(BZR_PIN, OUTPUT);
 
   //init input pins
-  pinMode(SHIFT_SW, INPUT);
-  pinMode(MINMX_SW, INPUT);
-  pinMode(RANGE_SW, INPUT);
-  pinMode(HOLD_SW, INPUT);
-  pinMode(BKLT_SW, INPUT);
-  pinMode(BEEP_SW, INPUT);
-  pinMode(REL_SW, INPUT);
-  pinMode(HZ_SW, INPUT);
-  pinMode(RTC_INT, INPUT);
+  pinMode(SHIFT_SW_PIN, INPUT);
+  pinMode(MINMX_SW_PIN, INPUT);
+  pinMode(RANGE_SW_PIN, INPUT);
+  pinMode(HOLD_SW_PIN, INPUT);
+  pinMode(BKLT_SW_PIN, INPUT);
+  pinMode(BEEP_SW_PIN, INPUT);
+  pinMode(REL_SW_PIN, INPUT);
+  pinMode(HZ_SW_PIN, INPUT);
+  pinMode(RTC_INT_PIN, INPUT);
 
   //turn backlight off by default
   digitalWrite(BKLT_PIN, LOW);
@@ -64,10 +74,10 @@ void setup()
   digitalWrite(BZR_PIN, LOW);
 
   //get current state of the backlight switch
-  prev_bkltSWState = digitalRead(BKLT_SW);
+  prev_bkltSWState = digitalRead(BKLT_SW_PIN);
 
   //attach interrupt to RTC INT pin
-  attachInterrupt(digitalPinToInterrupt(RTC_INT), rtcISR, FALLING);
+  attachInterrupt(digitalPinToInterrupt(RTC_INT_PIN), rtcISR, FALLING);
 
   //create timer for polling switches
   Timer1.initialize(100000); //100ms
@@ -165,7 +175,7 @@ void updateDisplayTime(void)
 void displayBatteryVoltage(void)
 {
   //read battery voltage
-  int battV = 10.1 * (3300.0 * (analogRead(BAT_V) / 1023.0));
+  int battV = 10.1 * (3300.0 * (analogRead(BAT_V_PIN) / 1023.0));
   display.writeValue(battV);
   display.update();
 }
@@ -173,8 +183,8 @@ void displayBatteryVoltage(void)
 void pollSwitches(void)
 {
   //read current switch status
-  current_bkltSWState = digitalRead(BKLT_SW);
-  current_hold_SWState = digitalRead(SHIFT_SW);
+  current_bkltSWState = digitalRead(BKLT_SW_PIN);
+  current_hold_SWState = digitalRead(SHIFT_SW_PIN);
 
   //falling edge
   if(current_bkltSWState == LOW && prev_bkltSWState == HIGH)
